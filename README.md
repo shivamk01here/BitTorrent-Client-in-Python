@@ -6,23 +6,15 @@ The client is not a practical BitTorrent client, it lacks too many
 features to really be useful. It was implemented for fun in order to
 learn more about BitTorrent as well as Python's asyncio library.
 
-See http://markuseliasson.se/article/bittorrent-in-python/ for a walkthrough
-on the BitTorrent protocol and how pieces works under the hood.
-
-The client currently only support downloading of data, although adding
-the remaining features regarding seeding and multi-file should not be
-that hard.
+The client currently only support downloading of data.
 
 Current features:
 
-- [x] Download pieces (leeching)
-- [x] Contact tracker periodically
-- [ ] Seed (upload) pieces
-- [ ] Support multi-file torrents
-- [ ] Resume a download
-
-Even though it's not practical at this point, feel free to learn from
-it, steal from it, improve it, laugh at it or just ignore it.
+- Download pieces (leeching)
+- Contact tracker periodically
+- Seed (upload) pieces
+- Support multi-file torrents
+- Resume a download
 
 Known issues:
 
@@ -97,28 +89,3 @@ currently does not support seeding - not all of the messages goes in
 both ways.
 
 
-## References
-
-There is plenty of information on how to write a BitTorrent client
-available on the Internet. These two articles were the real enablers
-for my implementation:
-
-* http://www.kristenwidman.com/blog/33/how-to-write-a-bittorrent-client-part-1/
-
-* https://wiki.theory.org/BitTorrentSpecification
-
-Asyncio is fairly new and I have not seen that many articles about it,
-at least not where the code examples are a little bit more elaborate
-than having a few coroutines sleep. Out of the ones I read and can
-recommend these are on the top of my list:
-
-* http://www.snarky.ca/how-the-heck-does-async-await-work-in-python-3-5
-
-* http://www.pythonsandbarracudas.com/blog/2015/11/22/developing-a-computational-pipeline-using-the-asyncio-module-in-python-3
-
-* http://dabeaz.com/coroutines/Coroutines.pdf
-
-
-# License
-
-The client is released under the Apache v2 license, see LICENCE.
