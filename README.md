@@ -1,61 +1,29 @@
-An experimental BitTorrent client implemented in Python 3 using asyncio.
+This is a fun project written in Python 3 that explores how BitTorrent works using asyncio, which is a library for asynchronous programming in Python.
 
-The client is not a practical BitTorrent client, it lacks too many
-features to really be useful. It was implemented for fun in order to
-learn more about BitTorrent as well as Python's asyncio library.
+So, what does this BitTorrent client actually do? Well, it's not a full-fledged one that you'd use every day. Instead, it's more of an experimental one made for learning purposes. It can do some basic things:
 
-The client currently only support downloading of data.
+1. Download files from other users (called leeching).
+2. Check in with the tracker regularly to find other users to connect to.
+3. Share files with others once they've been downloaded (called seeding).
+4. It can handle torrents with multiple files.
+5. If you stop the download and come back later, it can pick up where it left off.
 
-Current features:
+However, there are a few issues you might run into:
 
-- Download pieces (leeching)
-- Contact tracker periodically
-- Seed (upload) pieces
-- Support multi-file torrents
-- Resume a download
+- Sometimes, when you start the client, it might hang, especially if you're trying to connect to lots of other users at once.
 
-Known issues:
+Now, let's dive a bit into how the code works:
 
-* Sometimes the client hangs at startup. It seems to relate to the
-  number of concurrent peer connections.
+- The main part of the program is called `TorrentClient`. It connects to the tracker to find out who else has the file you want to download, then it creates a list of those peers.
+- It figures out which pieces of the file it should ask for first from these peers.
+- Once it's downloaded everything, it shuts down.
 
-### Code walkthrough
+The `PieceManager` is responsible for deciding which piece of the file to ask for next and putting the pieces together once they're downloaded. Right now, it uses a simple strategy.
 
-The `pieces.client.TorrentClient` is the center piece, it:
+One thing to note is that writing files happens one after the other, which could be improved for efficiency.
 
-* Connects to the tracker in order to receive the peers to connect to.
+The actual BitTorrent stuff is handled in the `protocol` module. The `PeerConnection` class sets up a connection to another user, and it manages the messages they send back and forth.
 
-* Based on that result, creates a Queue of peers that can be connected
-  to.
+Since BitTorrent is a binary protocol, decoding those messages is done using an async iterator called `PeerStreamIterator`. It keeps reading and understanding the data sent over the connection until it's closed.
 
-* Determine the order in which the pieces should be requested from the
-  remote peers.
-
-* Shuts down the client once the download is complete.
-
-
-The strategy on which piece to request next and the assembly of
-retrieved pieces is implemented in the `pieces.client.PieceManager`. As
-previously stated, the strategy implemented is the simplest one
-possible.
-
-Notice, the file writing is synchronous something that could be
-improved.
-
-The BitTorrent specifics is implemented in the `pieces.protocol` module
-where the `pieces.protocol.PeerConnection` sets up a connection to one
-of the remote peers retrieved from the tracker. This class handles the
-control flow of messages between the two peers.
-
-BitTorrent is a binary protocol, and all decoding of messages is
-implemented as a _async iterator_ under he name
-`pieces.protocol.PeerStreamIterator`. The async part is that this
-iterator will keep reading and parsing the raw data received from the
-socket until the connection is closed.
-
-Each of BitTorrents messages is implemented as separate classes, each
-with a `encode` and a `decode` method. However, since this client
-currently does not support seeding - not all of the messages goes in
-both ways.
-
-
+Each type of message in BitTorrent has its own class with methods to encode and decode it. But because this client doesn't support sharing files yet, not all the message types are used in both directions.
