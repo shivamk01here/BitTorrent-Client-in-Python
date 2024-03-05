@@ -21,34 +21,6 @@ Known issues:
 * Sometimes the client hangs at startup. It seems to relate to the
   number of concurrent peer connections.
 
-
-## Getting started
-
-Install the needed dependencies and run the unit tests with:
-
-    $ make init
-    $ make test
-
-In order to download a torrent file, run this command:
-
-    $ python pieces.py -v tests/data/bootfloppy-utils.img.torrent
-
-If everything goes well, your torrent should be downloaded and the
-program terminated. You can stop the client using `Ctrl + C`.
-
-
-## Design considerations
-
-The purpose with implementing this client was to learn myself some
-`asyncio` (and other Python 3.5 features, such as _type hinting_)
-together with my old itch of implementing the BitTorrent protocol.
-
-Thus, the code have been written to be as clear and simple as possible,
-not bothering about efficiency or performance. E.g. the pieces are all
-requested in order, not implementing a _rares first_ algorithm, and the
-pieces are all kept in memory until the entire torrent is downloaded.
-
-
 ### Code walkthrough
 
 The `pieces.client.TorrentClient` is the center piece, it:
