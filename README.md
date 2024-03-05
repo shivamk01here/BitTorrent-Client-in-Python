@@ -1,5 +1,3 @@
-# pieces
-
 An experimental BitTorrent client implemented in Python 3 using asyncio.
 
 The client is not a practical BitTorrent client, it lacks too many
